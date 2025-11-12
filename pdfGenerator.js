@@ -1,4 +1,6 @@
 const puppeteer = require('puppeteer');
+const puppeteerCore = require('puppeteer-core');
+const chromium = require('@sparticuz/chromium');
 const fs = require('fs');
 const path = require('path');
 
@@ -61,20 +63,25 @@ async function createQuotationPDF(propuestaData, customerPhone) {
     // Generar HTML para el PDF
     const htmlContent = generateProposalHTML(propuestaData);
 
-    // Iniciar Puppeteer con configuración para Render
-    browser = await puppeteer.launch({
-      headless: 'new',
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
-        '--no-first-run',
-        '--no-zygote',
-        '--single-process',
-        '--disable-gpu'
-      ]
-    });
+    // Detectar si estamos en producción (Render) o desarrollo local
+    const isProduction = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
+
+    // Iniciar Puppeteer con configuración según el entorno
+    if (isProduction) {
+      // En producción (Render) usar chromium
+      browser = await puppeteerCore.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(),
+        headless: chromium.headless
+      });
+    } else {
+      // En desarrollo local usar puppeteer normal
+      browser = await puppeteer.launch({
+        headless: 'new',
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      });
+    }
 
     const page = await browser.newPage();
 
