@@ -1,0 +1,50 @@
+{
+  "estructura": {
+    "portada": {
+      "titulo": "PROPUESTA PROYECTO",
+      "subtitulo": "Descripción breve del proyecto"
+    },
+    "secciones": [
+      {
+        "titulo": "OBJETIVO DEL PROYECTO",
+        "contenido": "Objetivo principal y objetivos específicos"
+      },
+      {
+        "titulo": "EQUIPO RESPONSABLE DEL PROYECTO",
+        "contenido": "Descripción del equipo asignado"
+      },
+      {
+        "titulo": "¿POR QUÉ DIGIT DECK AGENCY SAS?",
+        "contenido": "Diferenciadores y experiencia"
+      },
+      {
+        "titulo": "ENTREGABLES",
+        "contenido": "Lista detallada de entregables"
+      },
+      {
+        "titulo": "INVERSIÓN",
+        "contenido": "Costos, cronograma e incluidos"
+      },
+      {
+        "titulo": "CASOS RECIENTES DE ÉXITO",
+        "contenido": "Portfolio de proyectos similares"
+      }
+    ]
+  },
+  "ejemplos": {
+    "Medical_Supplies": {
+      "tipo": "Desarrollo Shopify",
+      "problema": "No tiene presencia digital sólida",
+      "solucion": "Sitio web corporativo moderno con estructura escalable hacia eCommerce",
+      "duracion": "6 semanas",
+      "inversion": "$6.500.000 COP"
+    },
+    "Sicurezza": {
+      "tipo": "CRO (Optimización)",
+      "problema": "Tiene eCommerce pero conversión del 1%",
+      "solucion": "Plan CRO con landing pages, pruebas A/B y optimización continua",
+      "duracion": "3 meses",
+      "inversion": "USD $3.000"
+    }
+  }
+}
