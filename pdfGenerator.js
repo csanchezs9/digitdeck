@@ -174,62 +174,64 @@ function generateProposalHTML(data) {
 
     body {
       font-family: 'Arial', 'Helvetica', sans-serif;
-      color: #333;
-      line-height: 1.6;
+      color: #000;
+      line-height: 1.65;
       background: white;
     }
 
     .page {
       width: 8.5in;
       min-height: 11in;
-      padding: 50px 60px;
+      padding: 60px 70px;
       page-break-after: always;
       position: relative;
     }
 
     .header {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
-      margin-bottom: 50px;
-      padding-bottom: 15px;
-      border-bottom: 2px solid #7c3aed;
+      margin-bottom: 60px;
+      padding-bottom: 12px;
+      border-bottom: 1.5px solid #7c3aed;
     }
 
     .logo {
-      font-size: 28px;
+      font-size: 24px;
       font-weight: bold;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 3px;
     }
 
     .logo-d {
       color: #000;
-      font-size: 36px;
+      font-size: 32px;
     }
 
     .logo-dot {
       color: #7c3aed;
-      font-size: 36px;
+      font-size: 32px;
     }
 
     .company-name {
-      font-size: 11px;
-      color: #333;
-      letter-spacing: 1.5px;
-      font-weight: normal;
+      font-size: 9px;
+      color: #000;
+      letter-spacing: 2px;
+      font-weight: 600;
+      margin-left: 12px;
     }
 
     .section-title {
-      font-size: 28px;
-      font-weight: bold;
+      font-size: 24px;
+      font-weight: 900;
       color: #000;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
       margin-top: 0;
-      padding-left: 20px;
-      border-left: 6px solid #7c3aed;
+      padding-left: 18px;
+      border-left: 5px solid #7c3aed;
       text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     .portada {
@@ -240,47 +242,62 @@ function generateProposalHTML(data) {
       position: relative;
       overflow: hidden;
       padding-left: 0;
+      padding-top: 0;
     }
 
     .portada .header {
       position: absolute;
-      top: 50px;
-      left: 60px;
-      right: 60px;
+      top: 60px;
+      left: 70px;
+      right: auto;
       margin-bottom: 0;
+      justify-content: flex-start;
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .portada .header::after {
+      content: '';
+      position: absolute;
+      right: -50px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 200px;
+      height: 1.5px;
+      background: #7c3aed;
     }
 
     .portada-content {
       z-index: 2;
       position: relative;
-      padding-left: 30px;
-      border-left: 6px solid #7c3aed;
-      max-width: 600px;
+      padding-left: 25px;
+      border-left: 5px solid #7c3aed;
+      max-width: 550px;
     }
 
     .portada h1 {
-      font-size: 24px;
+      font-size: 20px;
       color: #666;
-      margin-bottom: 15px;
-      letter-spacing: 3px;
-      font-weight: normal;
+      margin-bottom: 8px;
+      letter-spacing: 4px;
+      font-weight: 400;
       text-transform: uppercase;
     }
 
     .portada h2 {
-      font-size: 72px;
+      font-size: 80px;
       font-weight: 900;
       color: #000;
-      margin-bottom: 50px;
-      line-height: 1;
+      margin-bottom: 45px;
+      line-height: 0.95;
       text-transform: uppercase;
-      letter-spacing: -1px;
+      letter-spacing: -2px;
     }
 
     .portada-descripcion {
-      font-size: 14px;
-      color: #333;
-      line-height: 1.8;
+      font-size: 13px;
+      color: #000;
+      line-height: 1.75;
       max-width: 500px;
       text-align: left;
     }
@@ -317,40 +334,40 @@ function generateProposalHTML(data) {
     }
 
     p {
-      margin-bottom: 15px;
+      margin-bottom: 14px;
       text-align: left;
-      font-size: 14px;
-      line-height: 1.8;
-      color: #333;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #000;
     }
 
     ul, ol {
-      margin-left: 20px;
-      margin-bottom: 20px;
+      margin-left: 18px;
+      margin-bottom: 16px;
     }
 
     li {
-      margin-bottom: 10px;
-      font-size: 14px;
-      line-height: 1.7;
-      color: #333;
+      margin-bottom: 8px;
+      font-size: 13px;
+      line-height: 1.65;
+      color: #000;
     }
 
     .equipo-miembro {
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .equipo-miembro h4 {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: bold;
       color: #000;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .equipo-miembro p {
-      font-size: 14px;
-      color: #333;
-      margin-left: 10px;
+      font-size: 13px;
+      color: #000;
+      margin-left: 0;
       text-align: left;
     }
 
@@ -375,10 +392,10 @@ function generateProposalHTML(data) {
     }
 
     h3 {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: bold;
       color: #000;
-      margin: 20px 0 15px 0;
+      margin: 18px 0 12px 0;
     }
 
     .image-gallery {
@@ -391,10 +408,10 @@ function generateProposalHTML(data) {
 
     .hero-image {
       width: 100%;
-      max-height: 400px;
+      max-height: 350px;
       object-fit: contain;
       border-radius: 0;
-      margin: 30px 0;
+      margin: 25px 0;
       box-shadow: none;
     }
 
