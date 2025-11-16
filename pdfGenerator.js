@@ -259,12 +259,13 @@ function generateProposalHTML(data) {
     .portada .header::after {
       content: '';
       position: absolute;
-      right: -50px;
+      left: 100%;
       top: 50%;
       transform: translateY(-50%);
       width: 200px;
       height: 1.5px;
       background: #7c3aed;
+      margin-left: 15px;
     }
 
     .portada-content {
@@ -408,11 +409,12 @@ function generateProposalHTML(data) {
 
     .hero-image {
       width: 100%;
-      max-height: 350px;
+      max-height: 420px;
       object-fit: contain;
-      border-radius: 0;
-      margin: 25px 0;
-      box-shadow: none;
+      border-radius: 12px;
+      margin: 30px 0;
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.15);
+      display: block;
     }
 
     .page-number {
@@ -477,6 +479,8 @@ function generateProposalHTML(data) {
     </ol>
 
     <p>${data.objetivoDelProyecto.resumen}</p>
+
+    ${carouselImages[0] ? `<img src="${carouselImages[0]}" class="hero-image" alt="Showcase 1">` : ''}
   </div>
 
   <!-- EQUIPO RESPONSABLE -->
@@ -495,6 +499,8 @@ function generateProposalHTML(data) {
     ${equipoMiembrosHTML}
 
     <p>${data.equipoResponsable.cierre}</p>
+
+    ${carouselImages[1] ? `<img src="${carouselImages[1]}" class="hero-image" alt="Showcase 2">` : ''}
   </div>
 
   <!-- POR QUÉ DIGIT DECK -->
@@ -509,6 +515,8 @@ function generateProposalHTML(data) {
     <div class="section-title">¿POR QUÉ DIGIT DECK AGENCY SAS?</div>
 
     ${porQueParrafosHTML}
+
+    ${carouselImages[2] ? `<img src="${carouselImages[2]}" class="hero-image" alt="Showcase 3">` : ''}
   </div>
 
   <!-- ENTREGABLES -->
@@ -525,6 +533,8 @@ function generateProposalHTML(data) {
     <ol>
       ${entregablesHTML}
     </ol>
+
+    ${carouselImages[3] ? `<img src="${carouselImages[3]}" class="hero-image" alt="Showcase 4">` : ''}
   </div>
 
   <!-- INVERSIÓN -->
@@ -552,6 +562,24 @@ function generateProposalHTML(data) {
         ${incluyeHTML}
       </ul>
     </div>
+
+    ${carouselImages[4] ? `<img src="${carouselImages[4]}" class="hero-image" alt="Showcase 5">` : ''}
+  </div>
+
+  <!-- SHOWCASE FINAL -->
+  <div class="page">
+    <div class="header">
+      <div class="logo">
+        <span class="logo-d">D</span><span class="logo-dot">.</span>
+        <span class="company-name">DIGIT DECK AGENCY SAS</span>
+      </div>
+    </div>
+
+    <div class="section-title">NUESTROS PROYECTOS</div>
+
+    <p>En Digit Deck Agency SAS nos especializamos en crear soluciones digitales innovadoras que transforman ideas en experiencias memorables. Nuestro compromiso es entregar proyectos de alta calidad que superen las expectativas de nuestros clientes.</p>
+
+    ${carouselImages[5] ? `<img src="${carouselImages[5]}" class="hero-image" alt="Showcase 6">` : ''}
   </div>
 
 </body>
