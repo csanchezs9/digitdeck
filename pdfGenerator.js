@@ -479,8 +479,6 @@ function generateProposalHTML(data) {
     </ol>
 
     <p>${data.objetivoDelProyecto.resumen}</p>
-
-    ${carouselImages[0] ? `<img src="${carouselImages[0]}" class="hero-image" alt="Showcase 1">` : ''}
   </div>
 
   <!-- EQUIPO RESPONSABLE -->
@@ -499,8 +497,6 @@ function generateProposalHTML(data) {
     ${equipoMiembrosHTML}
 
     <p>${data.equipoResponsable.cierre}</p>
-
-    ${carouselImages[1] ? `<img src="${carouselImages[1]}" class="hero-image" alt="Showcase 2">` : ''}
   </div>
 
   <!-- POR QUÉ DIGIT DECK -->
@@ -515,8 +511,6 @@ function generateProposalHTML(data) {
     <div class="section-title">¿POR QUÉ DIGIT DECK AGENCY SAS?</div>
 
     ${porQueParrafosHTML}
-
-    ${carouselImages[2] ? `<img src="${carouselImages[2]}" class="hero-image" alt="Showcase 3">` : ''}
   </div>
 
   <!-- ENTREGABLES -->
@@ -533,8 +527,6 @@ function generateProposalHTML(data) {
     <ol>
       ${entregablesHTML}
     </ol>
-
-    ${carouselImages[3] ? `<img src="${carouselImages[3]}" class="hero-image" alt="Showcase 4">` : ''}
   </div>
 
   <!-- INVERSIÓN -->
@@ -562,24 +554,6 @@ function generateProposalHTML(data) {
         ${incluyeHTML}
       </ul>
     </div>
-
-    ${carouselImages[4] ? `<img src="${carouselImages[4]}" class="hero-image" alt="Showcase 5">` : ''}
-  </div>
-
-  <!-- SHOWCASE FINAL -->
-  <div class="page">
-    <div class="header">
-      <div class="logo">
-        <span class="logo-d">D</span><span class="logo-dot">.</span>
-        <span class="company-name">DIGIT DECK AGENCY SAS</span>
-      </div>
-    </div>
-
-    <div class="section-title">NUESTROS PROYECTOS</div>
-
-    <p>En Digit Deck Agency SAS nos especializamos en crear soluciones digitales innovadoras que transforman ideas en experiencias memorables. Nuestro compromiso es entregar proyectos de alta calidad que superen las expectativas de nuestros clientes.</p>
-
-    ${carouselImages[5] ? `<img src="${carouselImages[5]}" class="hero-image" alt="Showcase 6">` : ''}
   </div>
 
 </body>
