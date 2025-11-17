@@ -1,12 +1,14 @@
-# Chatbot de WhatsApp - Generador de Cotizaciones PDF
+# Chatbot WhatsApp - Generador de Propuestas PDF
 
-Bot de WhatsApp con IA (Google Gemini) que genera cotizaciones profesionales en PDF.
+Bot de WhatsApp con IA (Groq/Llama 3.3) para generar propuestas comerciales profesionales en PDF.
 
 ## Características
 
-- WhatsApp Business API + Google Gemini AI
-- Generación automática de PDFs con Puppeteer
-- Webhooks en tiempo real
+- WhatsApp Business API con menús interactivos
+- IA Groq (Llama 3.3 70B) para generar propuestas personalizadas
+- PDFs profesionales con Puppeteer
+- Formulario guiado de 5 preguntas
+- Propuestas adaptadas a Desarrollo Shopify, CRO o ambos
 
 ## Instalación
 
@@ -17,41 +19,55 @@ cp .env.example .env
 
 Configurar `.env`:
 ```env
-WHATSAPP_TOKEN=tu_token
-WHATSAPP_PHONE_NUMBER_ID=tu_id
+WHATSAPP_TOKEN=tu_token_de_meta
+WHATSAPP_PHONE_NUMBER_ID=tu_phone_id
 VERIFY_TOKEN=tu_token_secreto
-GEMINI_API_KEY=tu_api_key
+GROQ_API_KEY=tu_api_key_de_groq
 PORT=3000
-BASE_URL=https://tu-dominio.ngrok.io
 ```
 
-## Configuración WhatsApp
+## Configuración
 
-1. [Meta Developers](https://developers.facebook.com/) → Crear app Business → Agregar WhatsApp
-2. Copiar `PHONE_NUMBER_ID` y generar token de acceso
-3. Configurar webhook:
+1. **Groq API**: Obtén tu key en [console.groq.com](https://console.groq.com)
+2. **WhatsApp Business**:
+   - Ve a [Meta Developers](https://developers.facebook.com/)
+   - Crea app Business → Agregar WhatsApp
+   - Copia `PHONE_NUMBER_ID` y token de acceso
+3. **Webhook**:
    ```bash
    npm start
    ngrok http 3000
    ```
-4. En Meta Console: URL webhook + token de verificación + suscribirse a `messages`
+   - En Meta Console: `https://tu-url.ngrok.io/webhook`
+   - Suscribirse a `messages`
 
 ## Uso
 
 ```bash
-npm start  # o npm run dev
+npm start       # Producción
+npm run dev     # Desarrollo con nodemon
 ```
 
-Envía "generar pdf" después de conversar con el bot para recibir la cotización.
+El bot guía al usuario con un formulario de 5 preguntas:
+1. Nombre de la empresa
+2. Actividad de la empresa
+3. Problema/necesidad principal
+4. ¿Tiene ecommerce?
+5. Tipo de propuesta (Shopify / CRO / Ambas)
 
-## Troubleshooting
+## Estructura
 
-- **Webhook no verifica**: Revisar servidor activo, ngrok funcionando y VERIFY_TOKEN correcto
-- **No recibe mensajes**: Número en lista de pruebas y webhook suscrito a "messages"
-- **Error PDF**: Instalar Puppeteer correctamente y verificar permisos en directorio `pdfs/`
+```
+PDFdigitdeck/
+├── server.js          # API Express + lógica de WhatsApp
+├── aiAgent.js         # Integración con Groq
+├── pdfGenerator.js    # Generación de PDFs
+├── whatsapp.js        # Funciones de WhatsApp API
+└── pdfs/             # PDFs generados (temporal)
+```
 
 ## Personalización
 
-- **PDF**: Editar `generateQuotationHTML()` en `pdfGenerator.js`
-- **IA**: Modificar `SYSTEM_PROMPT` en `aiAgent.js`
-- **Triggers**: Cambiar condiciones en `server.js:72`
+- **Prompt IA**: `PROPUESTA_PROMPT` en `aiAgent.js:156`
+- **Diseño PDF**: `generateQuotationHTML()` en `pdfGenerator.js`
+- **Flujo formulario**: `processFormStep()` en `server.js:353`
