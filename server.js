@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const whatsapp = require('./whatsapp');
 const aiAgent = require('./aiAgent');
 const pdfGenerator = require('./pdfGenerator');
+const supabaseClient = require('./supabaseClient');
+const reminderService = require('./reminderService');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -106,8 +108,8 @@ async function sendMainMenu(from) {
     '¡Bienvenido! 👋\n\nSoy tu asistente virtual de Digit Deck.\n\n¿En qué puedo ayudarte hoy?',
     [
       { id: 'btn_cotizacion', title: '💰 Cotización' },
-      { id: 'btn_info', title: 'ℹ️ Información' },
-      { id: 'btn_ayuda', title: '❓ Ayuda' }
+      { id: 'btn_agendar_cita', title: '📅 Agendar Cita' },
+      { id: 'btn_info', title: 'ℹ️ Información' }
     ],
     'Digit Deck',
     'Selecciona una opción del menú'
@@ -136,6 +138,10 @@ async function handleInteractiveResponse(from, interactive) {
     switch (buttonId) {
       case 'btn_cotizacion':
         await startQuotationFlow(from);
+        break;
+
+      case 'btn_agendar_cita':
+        await startAppointmentFlow(from);
         break;
 
       case 'btn_info':
@@ -258,6 +264,18 @@ async function handleInteractiveResponse(from, interactive) {
       await sendMainMenu(from);
       break;
 
+    case 'btn_confirmar_cita':
+      await confirmarYGuardarCita(from);
+      break;
+
+    case 'btn_cancelar_cita':
+      if (conversations.has(from)) {
+        conversations.delete(from);
+      }
+      await whatsapp.sendMessage(from, '❌ Agendamiento cancelado.');
+      await sendMainMenu(from);
+      break;
+
     default:
       console.log(`⚠️ Botón no reconocido: ${buttonId}`);
       await sendErrorMenu(from, 'Opción no reconocida.');
@@ -339,6 +357,9 @@ async function handleTextMessage(from, messageBody) {
         return;
       }
       await processFormStep(from, messageBody, conversation);
+    } else if (conversation.state === 'agendando_cita') {
+      // Flujo de agendamiento de cita
+      await processAppointmentStep(from, messageBody, conversation);
     } else {
       // Si no está en ningún flujo, mostrar menú
       await sendMainMenu(from);
@@ -518,6 +539,206 @@ async function sendErrorMenu(from, errorMessage) {
   }
 }
 
+// ============================================
+// FUNCIONES DE AGENDAMIENTO DE CITAS
+// ============================================
+
+// Función para iniciar el flujo de agendamiento
+async function startAppointmentFlow(from) {
+  conversations.set(from, {
+    appointmentData: {},
+    state: 'agendando_cita',
+    step: 'email'
+  });
+
+  await whatsapp.sendMessage(from,
+    '📅 *Agendar Cita*\n\n' +
+    'Perfecto! Voy a ayudarte a agendar una cita.\n\n' +
+    '📧 *Paso 1 de 4*\n\n' +
+    'Por favor ingresa tu *correo electrónico*:'
+  );
+}
+
+// Procesar cada paso del agendamiento
+async function processAppointmentStep(from, messageBody, conversation) {
+  try {
+    const step = conversation.step;
+
+    if (!messageBody || messageBody.trim().length === 0) {
+      await whatsapp.sendMessage(from, 'Por favor escribe una respuesta válida.');
+      return;
+    }
+
+    switch (step) {
+      case 'email':
+        // Validar email básico
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(messageBody.trim())) {
+          await whatsapp.sendMessage(from, '❌ Email inválido. Por favor ingresa un correo válido (ej: nombre@ejemplo.com)');
+          return;
+        }
+        conversation.appointmentData.email = messageBody.trim();
+        conversation.step = 'nombre';
+        await whatsapp.sendMessage(from,
+          '✅ Email guardado!\n\n' +
+          '👤 *Paso 2 de 4*\n\n' +
+          '¿Cuál es tu *nombre completo*?'
+        );
+        break;
+
+      case 'nombre':
+        conversation.appointmentData.nombre_cliente = messageBody.trim();
+        conversation.step = 'servicio';
+        await whatsapp.sendMessage(from,
+          '✅ Perfecto!\n\n' +
+          '💼 *Paso 3 de 4*\n\n' +
+          '¿Qué servicio te interesa?\n' +
+          '(Ej: Desarrollo Shopify, CRO, Consultoría, etc.)'
+        );
+        break;
+
+      case 'servicio':
+        conversation.appointmentData.tipo_servicio = messageBody.trim();
+        conversation.step = 'fecha';
+        await whatsapp.sendMessage(from,
+          '✅ Entendido!\n\n' +
+          '📅 *Paso 4 de 4*\n\n' +
+          'Ingresa la *fecha y hora* para tu cita:\n\n' +
+          '*Formato:* DD/MM/YYYY HH:MM\n' +
+          '*Ejemplo:* 25/01/2025 14:30'
+        );
+        break;
+
+      case 'fecha':
+        // Parsear fecha
+        const fechaParts = messageBody.trim().match(/(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2})/);
+        if (!fechaParts) {
+          await whatsapp.sendMessage(from,
+            '❌ Formato de fecha inválido.\n\n' +
+            'Por favor usa el formato: DD/MM/YYYY HH:MM\n' +
+            'Ejemplo: 25/01/2025 14:30'
+          );
+          return;
+        }
+
+        const [, dia, mes, año, hora, minuto] = fechaParts;
+        const fechaCita = new Date(año, mes - 1, dia, hora, minuto);
+
+        // Validar que sea fecha futura
+        if (fechaCita <= new Date()) {
+          await whatsapp.sendMessage(from, '❌ La fecha debe ser en el futuro. Por favor ingresa una fecha válida.');
+          return;
+        }
+
+        conversation.appointmentData.fecha_cita = fechaCita.toISOString();
+        await mostrarResumenCita(from, conversation.appointmentData);
+        break;
+
+      default:
+        await sendErrorMenu(from, 'Paso no reconocido.');
+    }
+  } catch (error) {
+    console.error('❌ Error procesando paso de cita:', error);
+    await sendErrorMenu(from, 'Ocurrió un error procesando tu respuesta.');
+  }
+}
+
+// Mostrar resumen de la cita antes de confirmar
+async function mostrarResumenCita(from, appointmentData) {
+  const fechaCita = new Date(appointmentData.fecha_cita);
+  const fechaFormateada = fechaCita.toLocaleDateString('es-ES', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+
+  const resumen =
+    '📋 *Resumen de tu cita:*\n\n' +
+    `👤 *Nombre:* ${appointmentData.nombre_cliente}\n\n` +
+    `📧 *Email:* ${appointmentData.email}\n\n` +
+    `💼 *Servicio:* ${appointmentData.tipo_servicio}\n\n` +
+    `📅 *Fecha y hora:* ${fechaFormateada}\n\n` +
+    '¿Confirmas esta información?';
+
+  await whatsapp.sendInteractiveButtons(
+    from,
+    resumen,
+    [
+      { id: 'btn_confirmar_cita', title: '✅ Confirmar' },
+      { id: 'btn_cancelar_cita', title: '❌ Cancelar' }
+    ],
+    'Confirmar Cita',
+    'Revisa la información antes de confirmar'
+  );
+}
+
+// Confirmar y guardar cita en Supabase
+async function confirmarYGuardarCita(from) {
+  try {
+    const conversation = conversations.get(from);
+
+    if (!conversation || !conversation.appointmentData) {
+      await sendErrorMenu(from, 'No hay información de cita para guardar.');
+      return;
+    }
+
+    await whatsapp.sendMessage(from, '⏳ Guardando tu cita...');
+
+    // Preparar datos para Supabase
+    const citaData = {
+      whatsapp_number: from,
+      email: conversation.appointmentData.email,
+      nombre_cliente: conversation.appointmentData.nombre_cliente,
+      tipo_servicio: conversation.appointmentData.tipo_servicio,
+      fecha_cita: conversation.appointmentData.fecha_cita,
+      estado: 'pendiente',
+      recordatorio_enviado: false
+    };
+
+    // Guardar en Supabase
+    const citaGuardada = await supabaseClient.crearCita(citaData);
+
+    const fechaCita = new Date(citaGuardada.fecha_cita);
+    const fechaFormateada = fechaCita.toLocaleDateString('es-ES', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    await whatsapp.sendMessage(from,
+      '✅ *¡Cita agendada exitosamente!*\n\n' +
+      `📅 Tu cita está programada para:\n${fechaFormateada}\n\n` +
+      `📧 Te enviamos confirmación a: ${citaGuardada.email}\n\n` +
+      '🔔 Te enviaremos un recordatorio 24 horas antes.\n\n' +
+      `ID de tu cita: #${citaGuardada.id}`
+    );
+
+    await whatsapp.sendInteractiveButtons(
+      from,
+      '¿Qué te gustaría hacer ahora?',
+      [
+        { id: 'btn_agendar_cita', title: '📅 Nueva cita' },
+        { id: 'btn_volver_menu', title: '🏠 Menú principal' }
+      ],
+      null,
+      null
+    );
+
+    // Limpiar conversación
+    conversations.delete(from);
+
+  } catch (error) {
+    console.error('❌ Error guardando cita:', error);
+    await sendErrorMenu(from, 'Hubo un error al guardar la cita. Por favor intenta de nuevo.');
+  }
+}
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({
@@ -532,4 +753,7 @@ app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
   console.log(`📱 WhatsApp Phone ID: ${process.env.WHATSAPP_PHONE_NUMBER_ID}`);
   console.log(`🔐 Webhook endpoint: http://localhost:${PORT}/webhook`);
+
+  // Iniciar servicio de recordatorios de citas
+  reminderService.iniciarServicioRecordatorios();
 });
