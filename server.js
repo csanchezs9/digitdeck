@@ -103,13 +103,13 @@ app.post('/webhook', async (req, res) => {
 async function sendMainMenu(from) {
   await whatsapp.sendInteractiveButtons(
     from,
-    '¡Bienvenido! 👋\n\nSoy tu asistente virtual de Digital Deck.\n\n¿En qué puedo ayudarte hoy?',
+    '¡Bienvenido! 👋\n\nSoy tu asistente virtual de Digit Deck.\n\n¿En qué puedo ayudarte hoy?',
     [
       { id: 'btn_cotizacion', title: '💰 Cotización' },
       { id: 'btn_info', title: 'ℹ️ Información' },
       { id: 'btn_ayuda', title: '❓ Ayuda' }
     ],
-    'Digital Deck',
+    'Digit Deck',
     'Selecciona una opción del menú'
   );
 }
@@ -140,7 +140,7 @@ async function handleInteractiveResponse(from, interactive) {
 
       case 'btn_info':
         await whatsapp.sendMessage(from,
-          '📋 *Digital Deck - Información*\n\n' +
+          '📋 *Digit Deck - Información*\n\n' +
           'Somos una empresa especializada en soluciones digitales.\n\n' +
           '✅ Desarrollo web\n' +
           '✅ Aplicaciones móviles\n' +
