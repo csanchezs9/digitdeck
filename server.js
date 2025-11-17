@@ -540,12 +540,7 @@ async function startAppointmentFlow(from) {
     '1️⃣ Haz clic en el siguiente enlace:\n' +
     `${googleCalendarUrl}\n\n` +
     '2️⃣ Selecciona la fecha y hora que mejor te convenga\n\n' +
-    '3️⃣ Completa tus datos de contacto\n\n' +
-    '✅ *Beneficios:*\n' +
-    '• Calendario visual fácil de usar\n' +
-    '• Sincronización con Google Calendar\n' +
-    '• Recordatorios automáticos\n' +
-    '• Confirmación por email\n\n' +
+    '3️⃣ Completa tus datos de contacto\n\n' +    
     '📧 Recibirás un correo con todos los detalles de tu cita.\n\n' +
     '💬 Si tienes dudas, escríbeme por aquí.'
   );
