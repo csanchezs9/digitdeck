@@ -531,20 +531,23 @@ async function sendErrorMenu(from, errorMessage) {
 
 // Función para iniciar el flujo de agendamiento
 async function startAppointmentFlow(from) {
-  // URL de tu Calendly (CAMBIAR POR TU LINK)
-  const calendlyUrl = process.env.CALENDLY_URL || 'https://calendly.com/tu-usuario';
+  // URL de Google Calendar booking
+  const googleCalendarUrl = process.env.GOOGLE_CALENDAR_URL || 'https://calendar.google.com';
 
   await whatsapp.sendMessage(from,
     '📅 *Agendar Cita con Digit Deck*\n\n' +
-    '¡Perfecto! Puedes agendar tu cita de forma rápida y fácil.\n\n' +
-    '🔗 Haz clic en el siguiente enlace para ver mi calendario y elegir el horario que mejor te convenga:\n\n' +
-    `${calendlyUrl}\n\n` +
+    '¡Perfecto! Para agendar tu cita, sigue estos pasos:\n\n' +
+    '1️⃣ Haz clic en el siguiente enlace:\n' +
+    `${googleCalendarUrl}\n\n` +
+    '2️⃣ Selecciona la fecha y hora que mejor te convenga\n\n' +
+    '3️⃣ Completa tus datos de contacto\n\n' +
     '✅ *Beneficios:*\n' +
-    '• Elige la fecha y hora que prefieras\n' +
-    '• Sincronización automática con tu calendario\n' +
-    '• Recordatorios por email\n' +
-    '• Confirmación instantánea\n\n' +
-    '📧 Recibirás un correo con todos los detalles de tu cita.'
+    '• Calendario visual fácil de usar\n' +
+    '• Sincronización con Google Calendar\n' +
+    '• Recordatorios automáticos\n' +
+    '• Confirmación por email\n\n' +
+    '📧 Recibirás un correo con todos los detalles de tu cita.\n\n' +
+    '💬 Si tienes dudas, escríbeme por aquí.'
   );
 
   await whatsapp.sendInteractiveButtons(
@@ -559,7 +562,7 @@ async function startAppointmentFlow(from) {
   );
 }
 
-// Las citas se gestionan directamente desde Calendly
+// Las citas se gestionan directamente desde Google Calendar
 // No necesitamos procesar pasos de agendamiento manualmente
 
 // Health check endpoint
@@ -576,5 +579,5 @@ app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
   console.log(`📱 WhatsApp Phone ID: ${process.env.WHATSAPP_PHONE_NUMBER_ID}`);
   console.log(`🔐 Webhook endpoint: http://localhost:${PORT}/webhook`);
-  console.log(`📅 Calendly URL: ${process.env.CALENDLY_URL || 'No configurado'}`);
+  console.log(`📅 Google Calendar URL: ${process.env.GOOGLE_CALENDAR_URL || 'No configurado'}`);
 });
