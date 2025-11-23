@@ -191,7 +191,7 @@ async function handleInteractiveResponse(from, interactive) {
         conversation.step = 'tipo_propuesta';
         await whatsapp.sendInteractiveButtons(
           from,
-          '📝 *Pregunta 5 de 5*\n\n¿La propuesta es para desarrollo de tienda en Shopify, para CRO o para ambas?',
+          '📝 *Pregunta 5 de 5*\n\n¿La propuesta es para desarrollo de tienda en Shopify, para CRO (Optimización de Tasa de Conversión) o para ambas?',
           [
             { id: 'propuesta_shopify', title: 'Desarrollo Shopify' },
             { id: 'propuesta_cro', title: 'CRO' },
@@ -209,7 +209,7 @@ async function handleInteractiveResponse(from, interactive) {
         conversation.step = 'tipo_propuesta';
         await whatsapp.sendInteractiveButtons(
           from,
-          '📝 *Pregunta 5 de 5*\n\n¿La propuesta es para desarrollo de tienda en Shopify, para CRO o para ambas?',
+          '📝 *Pregunta 5 de 5*\n\n¿La propuesta es para desarrollo de tienda en Shopify, para CRO (Optimización de Tasa de Conversión) o para ambas?',
           [
             { id: 'propuesta_shopify', title: 'Desarrollo Shopify' },
             { id: 'propuesta_cro', title: 'CRO' },

@@ -237,6 +237,13 @@ REGLAS IMPORTANTES:
 7. USA un tono profesional, persuasivo y orientado a resultados
 8. MENCIONA casos de éxito relevantes cuando sea apropiado
 9. El equipo debe incluir 3-4 roles específicos según el proyecto
+10. IMPORTANTE: Cuando uses siglas/acrónimos en el texto, SIEMPRE incluye su significado entre paréntesis la PRIMERA vez que aparecen en cada sección. Ejemplos:
+    - "CRO (Optimización de Tasa de Conversión)" o "CRO (Conversion Rate Optimization)"
+    - "CRM (Gestión de Relaciones con el Cliente)" o "CRM (Customer Relationship Management)"
+    - "SEO (Optimización para Motores de Búsqueda)" o "SEO (Search Engine Optimization)"
+    - "UX (Experiencia de Usuario)" o "UX (User Experience)"
+    - "UI (Interfaz de Usuario)" o "UI (User Interface)"
+    - Cualquier otra sigla técnica debe explicarse entre paréntesis
 
 Retorna ÚNICAMENTE el JSON, sin texto adicional, sin markdown, sin explicaciones.`;
 
